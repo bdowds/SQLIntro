@@ -1,4 +1,5 @@
 ﻿using System;
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 
 namespace SQLIntro
@@ -9,10 +10,28 @@ namespace SQLIntro
 
         public List<Product> GetProducts()
         {
+            MySqlConnection conn = new MySqlConnection(connectionString);
 
+            using (conn)
+            {
+                conn.Open();
 
+                MySqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT ProductID AS id, name, ListPrice AS price FROM product;";
+                MySqlDataReader reader = cmd.ExecuteReader();
 
-            return new List<Product>();
+                List<Product> products = new List<Product>();
+                while(reader.Read())
+                {
+                    Product prod = new Product();
+                    prod.Id = (int)reader["id"];
+                    prod.Name = reader["name"].ToString();
+                    prod.Price = (double)reader["price"];
+
+                    products.Add(prod);
+                }
+                return products;
+            }  
         }
     }
 }
