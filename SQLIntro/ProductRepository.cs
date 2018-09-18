@@ -35,7 +35,7 @@ namespace SQLIntro
         }
 
 
-        public void CreateProduct(string n, double p)
+        public void CreateProduct(Product p)
         {
             MySqlConnection conn = new MySqlConnection(connectionString);
 
@@ -45,8 +45,66 @@ namespace SQLIntro
 
                 MySqlCommand cmd = conn.CreateCommand();
                 cmd.CommandText = "INSERT INTO product (Name, ListPrice) VALUES (@name, @price)";
+                cmd.Parameters.AddWithValue("name", p.Name);
+                cmd.Parameters.AddWithValue("price", p.Price);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void UpdateProduct(int pId, string n, double p)
+        {
+            var conn = new MySqlConnection(connectionString);
+
+            using (conn)
+            {
+                conn.Open();
+
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "UPDATE product SET Name = @name, ListPrice = @price WHERE ProductID = @productID;";
                 cmd.Parameters.AddWithValue("name", n);
                 cmd.Parameters.AddWithValue("price", p);
+                cmd.Parameters.AddWithValue("productID", pId);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void DeleteProduct(int id)
+        {
+            using (var conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "DELETE FROM Product WHERE ProductId = @pId;";
+                cmd.Parameters.AddWithValue("pId", id);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+
+        public void DeleteProduct(string name)
+        {
+            using (var conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "DELETE FROM Product WHERE Name LIKE @name;";
+                cmd.Parameters.AddWithValue("name", "%" + name + "%");
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void DeleteProduct(string name, int id)
+        {
+            using (var conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "DELETE FROM Product WHERE Name LIKE '%@name%' AND ProductID = @id;";
+                cmd.Parameters.AddWithValue("name", name);
+                cmd.Parameters.AddWithValue("id", id);
                 cmd.ExecuteNonQuery();
             }
         }
