@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 
 namespace SQLIntro
@@ -7,7 +9,19 @@ namespace SQLIntro
     {
         static void Main(string[] args)
         {
-            ProductRepository prodRepo = new ProductRepository();
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+#if DEBUG
+                .AddJsonFile("appsettings.Debug.json")
+#else
+                .AddJsonFile("appsettings.Release.json")
+#endif
+                .Build();
+
+            string connString = config.GetConnectionString("DefaultConnection");
+
+            ProductRepository prodRepo = new ProductRepository(connString);
 
 
             //List<Product> products = prodRepo.GetProducts();

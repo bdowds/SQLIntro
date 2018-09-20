@@ -6,7 +6,12 @@ namespace SQLIntro
 {
     class ProductRepository
     {
-        private static string connectionString = "Server=localhost;Database=adventureworks;Uid=root;Pwd=password;";
+        private static string connectionString;
+
+        public ProductRepository(string _connectionString)
+        {
+            connectionString = _connectionString;
+        }
 
         public List<Product> GetProducts()
         {
@@ -51,7 +56,9 @@ namespace SQLIntro
             }
         }
 
-        public void UpdateProduct(int pId, string n, double p)
+        //Updates a Product within out database. 
+        //Takes one Product as a parameter.
+        public void UpdateProduct(Product p)
         {
             var conn = new MySqlConnection(connectionString);
 
@@ -61,13 +68,14 @@ namespace SQLIntro
 
                 var cmd = conn.CreateCommand();
                 cmd.CommandText = "UPDATE product SET Name = @name, ListPrice = @price WHERE ProductID = @productID;";
-                cmd.Parameters.AddWithValue("name", n);
-                cmd.Parameters.AddWithValue("price", p);
-                cmd.Parameters.AddWithValue("productID", pId);
+                cmd.Parameters.AddWithValue("name", p.Name);
+                cmd.Parameters.AddWithValue("price", p.Price);
+                cmd.Parameters.AddWithValue("productID", p.Id);
                 cmd.ExecuteNonQuery();
             }
         }
 
+        //Deletes based on Id
         public void DeleteProduct(int id)
         {
             using (var conn = new MySqlConnection(connectionString))
@@ -81,7 +89,7 @@ namespace SQLIntro
             }
         }
 
-
+        //Deletes based on name
         public void DeleteProduct(string name)
         {
             using (var conn = new MySqlConnection(connectionString))
@@ -95,6 +103,7 @@ namespace SQLIntro
             }
         }
 
+        //Deletes based on name and Id
         public void DeleteProduct(string name, int id)
         {
             using (var conn = new MySqlConnection(connectionString))
