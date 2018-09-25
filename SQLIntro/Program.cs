@@ -21,7 +21,22 @@ namespace SQLIntro
 
             string connString = config.GetConnectionString("DefaultConnection");
 
-            ProductRepository prodRepo = new ProductRepository(connString);
+            //ProductRepository prodRepo = new ProductRepository(connString);
+            var addressRepo = new AddressRepository(connString);
+
+            var address = new Address();
+            address.Address1 = "123 Main St";
+            address.Address2 = "3.14 Sesame St";
+            address.City = "Hoover";
+            address.ProvinceId = 3;
+            address.PostalCode = "35244";
+
+            Console.WriteLine("Creating Address...");
+            addressRepo.CreateAddress(address);
+            Console.WriteLine("Address Created!");
+
+
+
 
 
             //List<Product> products = prodRepo.GetProducts();
@@ -32,14 +47,14 @@ namespace SQLIntro
             //}
 
 
-            Console.WriteLine("Creating Product...");
+            //Console.WriteLine("Creating Product...");
 
-            var newProduct = new Product { Name = "NewProduct", Price = 100 };
+            //var newProduct = new Product { Name = "NewProduct", Price = 100 };
 
-            prodRepo.CreateProduct(newProduct);
+            //prodRepo.CreateProduct(newProduct);
 
 
-            Console.WriteLine("Product Created!");
+            //Console.WriteLine("Product Created!");
 
             //Console.WriteLine("Updating Product...");
             //prodRepo.UpdateProduct(1004, "Updated", 100);

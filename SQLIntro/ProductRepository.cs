@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SQLIntro
 {
-    class ProductRepository
+    class ProductRepository : IRepository
     {
         private static string connectionString;
 
