@@ -49,7 +49,7 @@ namespace SQLIntro
                 conn.Open();
 
                 MySqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "INSERT INTO product (Name, ListPrice) VALUES (@name, @price)";
+                cmd.CommandText = "INSERT INTO product (Name, ListPrice) VALUES (@name, @price);";
                 cmd.Parameters.AddWithValue("name", p.Name);
                 cmd.Parameters.AddWithValue("price", p.Price);
                 cmd.ExecuteNonQuery();
