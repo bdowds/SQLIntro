@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using MySql.Data.MySqlClient;
 using Dapper;
+using System.Linq;
 
 namespace SQLIntro
 {
     public class DapperProductRepository : IRepository
     {
-        private string connectionString;
+        private readonly string connectionString;
 
         public DapperProductRepository(string _connectionString)
         {
@@ -27,17 +28,32 @@ namespace SQLIntro
 
         public void DeleteProduct(int id)
         {
-            throw new NotImplementedException();
+            using (var conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                conn.Execute("DELETE FROM Product WHERE ProductId = @pId;", new { pId = id });
+            }
         }
 
         public List<Product> GetProducts()
         {
-            throw new NotImplementedException();
+            using (var conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                return conn.Query<Product>("SELECT ProductID AS Id, name AS Name, ListPrice AS Price FROM product;").ToList();
+            }
         }
 
         public void UpdateProduct(Product prod)
         {
-            throw new NotImplementedException();
+            using (var conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                conn.Execute("UPDATE product SET Name = @name, ListPrice = @price WHERE ProductID = @productID;", new { name = prod.Name, price = prod.Price, productID = prod.Id });
+            }
         }
     }
 }

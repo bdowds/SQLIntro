@@ -26,7 +26,14 @@ namespace SQLIntro
             var dapperRepo = new DapperProductRepository(connString);
 
             var prod = new Product
+            {     
+                Name = "New Dapper Product",
+                Price = 100
+            };
+
+            var prod2 = new Product
             {
+                Id = 1009,
                 Name = "New Dapper Product",
                 Price = 100
             };
@@ -36,7 +43,9 @@ namespace SQLIntro
             dapperRepo.CreateProduct(prod);
             Console.WriteLine("Product Created!");
 
-
+            Console.WriteLine("Deleting Product...");
+            dapperRepo.DeleteProduct(prod2.Id);
+            Console.WriteLine("Product Deleted!");
 
 
 
